@@ -16,23 +16,25 @@ public class WebConnector {
     String BASE_URL = "http://gallows.hulu.com/play?code=%s";
     String BASE_PARAMS = "&token=%s&guess=%s";
 
+    //Setup basic get
     public WebConnector(String email) {
         BASE_URL = String.format(BASE_URL, email);
     }
 
     public GameState sendGet(GameState gameState, String guess) {
         try {
+            //Get Request
             String url = getURL(gameState, guess);
             URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
+            //Read result
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String inputLine;
             StringBuilder response = new StringBuilder();
-
             while ((inputLine = in.readLine()) != null)
                 response.append(inputLine);
             in.close();
+            //Return game state
             return GameState.JSONToGameStart(response.toString());
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -41,6 +43,7 @@ public class WebConnector {
     }
 
     private String getURL(GameState gameState, String guess) {
+        //Get guess or base url
         String url;
         if (gameState == null || guess == null)
             url = BASE_URL;

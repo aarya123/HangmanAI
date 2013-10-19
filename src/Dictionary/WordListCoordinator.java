@@ -18,27 +18,30 @@ public class WordListCoordinator {
     }
 
     public void refine(String word, String correct, String incorrect) {
+        //Refine all word lists
         String[] wordArray = word.split(" ");
         for (int i = 0; i < wordArray.length; i++)
             wordList.get(i).refine(wordArray[i], correct, incorrect);
     }
 
     public String letterToGuess(String word, String correct, String incorrect) {
-        HashMap<Character, Integer> charCount = new HashMap<Character, Integer>();
+        //Get best guess for all lists
+        HashMap<Character, Double> charCount = new HashMap<Character, Double>();
         String[] wordArray = word.split(" ");
         for (int i = 0; i < wordList.size(); i++) {
             if (!wordArray[i].contains("_"))
                 continue;
             WordList tempWordList = wordList.get(i);
-            AbstractMap.SimpleEntry<Character, Integer> temp = tempWordList.letterToGuess(correct, incorrect);
+            AbstractMap.SimpleEntry<Character, Double> temp = tempWordList.letterToGuess(correct, incorrect);
             if (charCount.get(temp.getKey()) == null)
                 charCount.put(temp.getKey(), temp.getValue());
             else
                 charCount.put(temp.getKey(), charCount.get(temp.getKey()) + temp.getValue());
         }
-        int maxInt = 0;
+        //Find single best guess
+        double maxInt = -1;
         char maxChar = 0;
-        for (Map.Entry<Character, Integer> temp : charCount.entrySet()) {
+        for (Map.Entry<Character, Double> temp : charCount.entrySet()) {
             if (temp.getValue() > maxInt) {
                 maxInt = temp.getValue();
                 maxChar = temp.getKey();
@@ -47,13 +50,5 @@ public class WordListCoordinator {
         if (!((maxChar >= 65 && maxChar <= 90) || (maxChar >= 97 && maxChar <= 122)))
             maxChar = (char) -1;
         return maxChar + "";
-    }
-
-    public String toString(String correct, String incorrect) {
-        String toReturn = "size=" + wordList.size() + "\n";
-        for (int i = 0; i < wordList.size(); i++) {
-            toReturn += " guessing for word #" + i + " is " + wordList.get(i).letterToGuess(correct, incorrect) + "\n";
-        }
-        return toReturn;
     }
 }

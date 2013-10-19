@@ -22,7 +22,9 @@ public class GameState {
     }
 
     public static GameState JSONToGameStart(String JSON) {
-        return gson.fromJson(JSON, GameState.class);
+        GameState temp = gson.fromJson(JSON, GameState.class);
+        temp.setState(temp.getState().toLowerCase());
+        return temp;
     }
 
     public HumanState getStatus() {
@@ -33,12 +35,12 @@ public class GameState {
         return state;
     }
 
-    public int getToken() {
-        return token;
+    public void setState(String state) {
+        this.state = state;
     }
 
-    public int getRemaining_guesses() {
-        return remaining_guesses;
+    public int getToken() {
+        return token;
     }
 
     public String toString() {

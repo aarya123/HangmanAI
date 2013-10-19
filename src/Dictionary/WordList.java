@@ -14,20 +14,25 @@ public class WordList {
         this.wordList = wordList;
     }
 
-    public AbstractMap.SimpleEntry<Character, Integer> letterToGuess(String correct, String incorrect) {
+    public AbstractMap.SimpleEntry<Character, Double> letterToGuess(String correct, String incorrect) {
         HashMap<Character, Integer> charCount = getCharFrequency();
+        int total=0;
+        for(Map.Entry<Character,Integer> temp:charCount.entrySet())
+        {
+            total+=temp.getValue();
+        }
         char maxChar = 0;
-        int maxInt = 0;
+        double maxPercent=0.0;
         for (Map.Entry<Character, Integer> temp : charCount.entrySet()) {
             char tempChar = temp.getKey();
             int tempInt = temp.getValue();
-            if (((tempChar >= 65 && tempChar <= 90) || (tempChar >= 97 && tempChar <= 122)) && tempInt > maxInt
+            if (((tempChar >= 65 && tempChar <= 90) || (tempChar >= 97 && tempChar <= 122)) &&  ((double)tempInt)/total > maxPercent
                     && !correct.contains(tempChar + "") && !incorrect.contains(tempChar + "")) {
-                maxInt = tempInt;
+                maxPercent = ((double)tempInt)/total ;
                 maxChar = tempChar;
             }
         }
-        return new AbstractMap.SimpleEntry<Character, Integer>(maxChar, maxInt);
+        return new AbstractMap.SimpleEntry<Character, Double>(maxChar, maxPercent);
     }
 
     private HashMap<Character, Integer> getCharFrequency() {
@@ -47,6 +52,7 @@ public class WordList {
     public void refine(String word, String correct, String incorrect) {
         char[] wordArray = word.toLowerCase().toCharArray(), correctArray = correct.toLowerCase().toCharArray(),
                 incorrectArray = incorrect.toLowerCase().toCharArray();
+        //Remove words with incorrect letters
         for (int i = 0; i < incorrectArray.length; i++)
             for (int j = 0; j < wordList.size(); j++)
                 if (wordList.get(j).contains(incorrectArray[i] + "")) {
@@ -57,12 +63,14 @@ public class WordList {
             for (int j = 0; j < wordList.size(); j++) {
                 String tempWord = wordList.get(j);
                 if (wordArray[i] == '_')
+                    //Remove words that have letters we already guessed in incorrect places
                     for (int k = 0; k < correctArray.length; k++) {
                         if (correctArray[k] == tempWord.toCharArray()[i]) {
                             wordList.remove(tempWord);
                             j--;
                         }
                     }
+                //Remove words where the word isn't equal to the guess
                 else if (wordArray[i] != tempWord.toCharArray()[i]) {
                     wordList.remove(tempWord);
                     j--;

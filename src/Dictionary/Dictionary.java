@@ -14,11 +14,13 @@ public class Dictionary {
     HashMap<Integer, ArrayList<String>> dictionary = new HashMap<Integer, ArrayList<String>>();
 
     public Dictionary() {
-        String fileName = "DictionaryFinal.txt";
         try {
+            //Read word list
+            String fileName = "DictionaryFinal.txt";
             FileReader inputFile = new FileReader(fileName);
             BufferedReader bufferReader = new BufferedReader(inputFile);
             String line;
+            //Add to words list based upon length
             while ((line = bufferReader.readLine()) != null) {
                 int length = line.length();
                 if (dictionary.get(length) == null)
