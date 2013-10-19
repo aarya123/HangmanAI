@@ -33,7 +33,6 @@ public class WebConnector {
             while ((inputLine = in.readLine()) != null)
                 response.append(inputLine);
             in.close();
-System.out.println(response.toString());
             return GameState.JSONToGameStart(response.toString());
         } catch (Exception e) {
             System.out.println(e.getMessage());
