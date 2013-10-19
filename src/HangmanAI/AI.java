@@ -29,19 +29,9 @@ public class AI {
         }
     }
 
-    private void test() {
-        //frosted
-        WordList wList = new WordList(dictionary.get(7));
-        System.out.println(wList.letterToGuess("", ""));
-        wList.refine("_____e_", "e", "");
-        System.out.println(wList.letterToGuess("e", ""));
-        wList.refine("_____e_", "e", "r");
-        System.out.println(wList.letterToGuess("e", "r"));
-    }
-
     private void play() {
         GameState gameState = webConnector.sendGet(null, null);
-        String guess = "", incorrect = "", correct = "";
+        String guess = "", correct = "", incorrect = "";
 
         ArrayList<WordList> wordList = new ArrayList<WordList>();
         String[] words = gameState.getState().split(" ");
@@ -50,19 +40,24 @@ public class AI {
         WordListCoordinator wordListCoordinator = new WordListCoordinator(wordList);
 
         while (gameState.getStatus() == GameState.HumanState.ALIVE) {
-            if (gameState.getState().contains(guess))
-                incorrect += guess;
-            else
+            if (gameState.getState().contains(guess.toUpperCase()))
                 correct += guess;
+            else
+                incorrect += guess;
             wordListCoordinator.refine(gameState.getState(), correct, incorrect);
             guess = wordListCoordinator.letterToGuess(gameState.getState(), correct, incorrect);
-            System.out.println("Guessing " + guess + " for " + gameState.getState()
-                    + " where correct = " + correct + " and incorrect = " + incorrect
-                    + " and " + wordListCoordinator.wordList.size() + " words left");
-            if (guess.equals(""))
-                System.out.println(wordListCoordinator.toString(correct, incorrect));
+            if (guess.equals(-1)) {
+                System.out.println("No more guesses :'(\nQuitting game...");
+                return;
+            }
+//            System.out.println("Guessing " + guess + " for " + gameState.getState()
+//                    + " where correct = " + correct + " and incorrect = " + incorrect);
             gameState = webConnector.sendGet(gameState, guess);
         }
-        System.out.println(gameState.toString());
+        if (gameState.getStatus() == GameState.HumanState.DEAD)
+            incorrect += guess;
+        else
+            correct += guess;
+        System.out.println(gameState.toString() + ", correct = " + correct + ", incorrect = " + incorrect);
     }
 }

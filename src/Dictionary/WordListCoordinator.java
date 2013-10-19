@@ -38,11 +38,14 @@ public class WordListCoordinator {
         }
         int maxInt = 0;
         char maxChar = 0;
-        for (Map.Entry<Character, Integer> temp : charCount.entrySet())
+        for (Map.Entry<Character, Integer> temp : charCount.entrySet()) {
             if (temp.getValue() > maxInt) {
                 maxInt = temp.getValue();
                 maxChar = temp.getKey();
             }
+        }
+        if (!((maxChar >= 65 && maxChar <= 90) || (maxChar >= 97 && maxChar <= 122)))
+            maxChar = (char) -1;
         return maxChar + "";
     }
 
