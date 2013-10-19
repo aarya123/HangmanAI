@@ -22,7 +22,7 @@ public class WordList {
             char tempChar = temp.getKey();
             int tempInt = temp.getValue();
             if (((tempChar >= 65 && tempChar <= 90) || (tempChar >= 97 && tempChar <= 122)) && tempInt > maxInt
-                    && !correct.contains(tempChar+"")&& !incorrect.contains(tempChar+"")) {
+                    && !correct.contains(tempChar + "") && !incorrect.contains(tempChar + "")) {
                 maxInt = tempInt;
                 maxChar = tempChar;
             }
