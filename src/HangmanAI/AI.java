@@ -24,9 +24,9 @@ public class AI {
     public static void main(String[] args) {
         AI player = new AI("arya0@purdue.edu");
         //player.test();
-        //while (true) {
-        player.play();
-        //}
+        while (true) {
+            player.play();
+        }
     }
 
     private void test() {
@@ -51,12 +51,16 @@ public class AI {
 
         while (gameState.getStatus() == GameState.HumanState.ALIVE) {
             if (gameState.getState().contains(guess))
-                correct += guess;
-            else
                 incorrect += guess;
+            else
+                correct += guess;
             wordListCoordinator.refine(gameState.getState(), correct, incorrect);
-            guess = wordListCoordinator.letterToGuess(correct, incorrect);
-            System.out.println("Guessing " + guess + " for " + gameState.getState());
+            guess = wordListCoordinator.letterToGuess(gameState.getState(), correct, incorrect);
+            System.out.println("Guessing " + guess + " for " + gameState.getState()
+                    + " where correct = " + correct + " and incorrect = " + incorrect
+                    + " and " + wordListCoordinator.wordList.size() + " words left");
+            if (guess.equals(""))
+                System.out.println(wordListCoordinator.toString(correct, incorrect));
             gameState = webConnector.sendGet(gameState, guess);
         }
         System.out.println(gameState.toString());

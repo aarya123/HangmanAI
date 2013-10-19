@@ -8,7 +8,7 @@ import java.util.*;
  * Time: 1:14 PM
  */
 public class WordList {
-    ArrayList<String> wordList;
+    public ArrayList<String> wordList;
 
     public WordList(ArrayList<String> wordList) {
         this.wordList = wordList;
