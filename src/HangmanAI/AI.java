@@ -56,8 +56,8 @@ public class AI {
                 System.out.println("No more guesses :'(\nQuitting game...");
                 return false;
             }
-//            System.out.println("Guessing " + guess + " for " + gameState.getState()
-//                    + " where correct = " + correct + " and incorrect = " + incorrect);
+            System.out.println("Guessing " + guess + " for " + gameState.getState()
+                    + " where correct = " + correct + " and incorrect = " + incorrect);
             gameState = webConnector.sendGet(gameState, guess);
         }
         //Final game state
